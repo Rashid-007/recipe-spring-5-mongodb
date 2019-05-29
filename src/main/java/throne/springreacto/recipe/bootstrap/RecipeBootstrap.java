@@ -34,8 +34,15 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        loadCategories();
-        loadUom();
+        if (categoryRepository.count() == 0L) {
+            log.debug("Loading Categories");
+            loadCategories();
+        }
+
+        if (unitOfMeasureRepository.count() == 0L) {
+            log.debug("Loading UOMs");
+            loadUom();
+        }
         recipeRepository.saveAll(getRecipes());
         log.debug("Loading Bootstrap data");
     }
